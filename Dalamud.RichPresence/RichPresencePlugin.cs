@@ -253,7 +253,7 @@ namespace Dalamud.RichPresence
                 var richPresenceSmallImageKey = DEFAULT_SMALL_IMAGE_KEY;
                 var richPresenceSmallImageText = LocalizationManager.Localize("DalamudRichPresenceOnline", LocalizationLanguage.Client);
 
-                if (territoryId != 0)
+                if (territoryId != 0 && RichPresenceConfig.ShowCurrentZone)
                 {
                     // Read territory data from generated sheet
                     var territory = this.Territories.First(row => row.RowId == territoryId);
