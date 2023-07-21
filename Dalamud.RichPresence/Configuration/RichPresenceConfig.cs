@@ -15,6 +15,8 @@ namespace Dalamud.RichPresence.Configuration
         // Show world name
         public bool ShowWorld = true;
 
+        // Show current zone
+        public bool ShowCurrentZone = true;
         // Show elapsed time in zones
         public bool ShowStartTime = false;
         // Reset timer when changing zones
