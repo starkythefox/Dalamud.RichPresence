@@ -67,6 +67,10 @@
     "message": "Show world name",
     "description": "Dalamud.RichPresence.Configuration.ShowWorld"
   },
+  "DalamudRichPresenceShowCurrentZone": {
+    "message": "Show current zone",
+    "description": "Dalamud.RichPresence.Configuration.ShowCurrentZone"
+  },
   "DalamudRichPresenceShowStartTime": {
     "message": "Show elapsed time in zones",
     "description": "Dalamud.RichPresence.Configuration.ShowStartTime"
