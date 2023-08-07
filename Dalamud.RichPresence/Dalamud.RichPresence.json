@@ -6,6 +6,6 @@
   "InternalName": "Dalamud.RichPresence",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/goaaats/Dalamud.RichPresence",
-  "Changelog": "API 7 compatibility",
+  "Changelog": "Added show zone toggle",
   "Tags": [ "Discord" ]
 }
