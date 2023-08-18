@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -193,6 +194,21 @@ namespace Dalamud.RichPresence
                 float.Parse(patch, CultureInfo.InvariantCulture);
         }
 
+        private string GetTerritoryName(TerritoryType territory) {
+            string territoryName = LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
+
+            if (territory.ContentFinderCondition.Value != null &&
+                    !territory.ContentFinderCondition.Value.Name.ToString().IsNullOrWhitespace()) {
+                territoryName = territory.ContentFinderCondition.Value?.Name;
+            } else if (territory.PlaceName.Value != null &&
+                    !territory.PlaceName.Value.Name.ToString().IsNullOrWhitespace()) {
+                territoryName = territory.PlaceName.Value?.Name;
+            }
+
+            var output = territoryName.Substring(0, 1).ToUpper() + territoryName.Substring(1);
+            return output;
+        }
+
         private unsafe void UpdateRichPresence(IFramework framework)
         {
             try
@@ -280,7 +296,7 @@ namespace Dalamud.RichPresence
                 {
                     // Read territory data from generated sheet
                     var territory = this.Territories.First(row => row.RowId == territoryId);
-                    territoryName = territory.PlaceName.Value?.Name ?? LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
+                    territoryName = this.GetTerritoryName(territory);
                     territoryRegion = territory.PlaceNameRegion.Value?.Name ?? LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
 
                     if (RichPresenceConfig.MaskNewZones &&
