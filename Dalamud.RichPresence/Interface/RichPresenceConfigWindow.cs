@@ -1,9 +1,11 @@
+using System;
 using System.Numerics;
 using Dalamud.Interface.Colors;
 using ImGuiNET;
 
 using Dalamud.RichPresence.Configuration;
 using Dalamud.RichPresence.Models;
+using Dalamud.RichPresence.Managers;
 
 namespace Dalamud.RichPresence.Interface
 {
@@ -11,6 +13,7 @@ namespace Dalamud.RichPresence.Interface
     {
         private bool IsOpen = false;
         private RichPresenceConfig RichPresenceConfig;
+        private string Filter = "";
 
         public RichPresenceConfigWindow()
         {
@@ -46,6 +49,25 @@ namespace Dalamud.RichPresence.Interface
                 ImGui.Checkbox(RichPresencePlugin.LocalizationManager.Localize("DalamudRichPresenceShowWorld", LocalizationLanguage.Plugin), ref RichPresenceConfig.ShowWorld);
                 ImGui.Separator();
                 ImGui.Checkbox(RichPresencePlugin.LocalizationManager.Localize("DalamudRichPresenceShowCurrentZone", LocalizationLanguage.Plugin), ref RichPresenceConfig.ShowCurrentZone);
+                ImGui.Checkbox(RichPresencePlugin.LocalizationManager.Localize("DalamudRichPresenceMaskZoneNames", LocalizationLanguage.Plugin), ref RichPresenceConfig.MaskNewZones);
+                ImGui.SameLine();
+                ImGui.SetNextItemWidth(100f);
+                if(ImGui.BeginCombo("##SpoilerPatch", RichPresenceConfig.PatchNumberOrGreater))
+                {
+                    ImGui.SetNextItemWidth(100f);
+                    ImGui.InputTextWithHint("##patchFilter", "Filter...", ref Filter, 50);
+                    foreach (var patch in PatchManager.OrderedPatchNumbers)
+                    {
+                        if ((Filter == string.Empty || patch.ToString().Contains(Filter, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            if (ImGui.Selectable(patch.ToString(), patch == RichPresenceConfig.PatchNumberOrGreater))
+                            {
+                                RichPresenceConfig.PatchNumberOrGreater = patch;
+                            }
+                        }
+                    }
+                    ImGui.EndCombo();
+                }
                 ImGui.Checkbox(RichPresencePlugin.LocalizationManager.Localize("DalamudRichPresenceShowStartTime", LocalizationLanguage.Plugin), ref RichPresenceConfig.ShowStartTime);
                 ImGui.Checkbox(RichPresencePlugin.LocalizationManager.Localize("DalamudRichPresenceResetTimeWhenChangingZones", LocalizationLanguage.Plugin), ref RichPresenceConfig.ResetTimeWhenChangingZones);
                 ImGui.Separator();

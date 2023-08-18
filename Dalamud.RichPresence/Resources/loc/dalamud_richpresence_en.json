@@ -71,6 +71,10 @@
     "message": "Show current zone",
     "description": "Dalamud.RichPresence.Configuration.ShowCurrentZone"
   },
+  "DalamudRichPresenceMaskZoneNames": {
+    "message": "Mask zone names from selected patch or later:",
+    "description": "Dalamud.RichPresence.Configuration.MaskNewZones"
+  },
   "DalamudRichPresenceShowStartTime": {
     "message": "Show elapsed time in zones",
     "description": "Dalamud.RichPresence.Configuration.ShowStartTime"
