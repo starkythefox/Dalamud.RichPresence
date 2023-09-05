@@ -18,7 +18,6 @@ using Dalamud.RichPresence.Configuration;
 using Dalamud.RichPresence.Interface;
 using Dalamud.RichPresence.Managers;
 using Dalamud.RichPresence.Models;
-using Dalamud.RichPresence.Mappers;
 
 namespace Dalamud.RichPresence
 {
@@ -48,8 +47,7 @@ namespace Dalamud.RichPresence
         internal static LocalizationManager LocalizationManager { get; private set; }
         internal static DiscordPresenceManager DiscordPresenceManager { get; private set; }
         internal static IpcManager IpcManager { get; private set; }
-
-        internal static PatchMapper PatchMapper { get; private set; }
+        internal static PatchManager PatchManager { get; private set; }
 
         private static RichPresenceConfigWindow RichPresenceConfigWindow;
         internal static RichPresenceConfig RichPresenceConfig { get; set; }
@@ -78,6 +76,7 @@ namespace Dalamud.RichPresence
             DiscordPresenceManager = new DiscordPresenceManager();
             LocalizationManager = new LocalizationManager();
             IpcManager = new IpcManager();
+            PatchManager = new PatchManager();
             SetDefaultPresence();
 
             RichPresenceConfigWindow = new RichPresenceConfigWindow();
@@ -273,7 +272,7 @@ namespace Dalamud.RichPresence
                     territoryRegion = territory.PlaceNameRegion.Value?.Name ?? LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
 
                     if (RichPresenceConfig.MaskNewZones &&
-                            this.ZonePatchIsInOrLaterThanPatch(PatchMapper.GetPatch(territoryId), RichPresenceConfig.PatchNumberOrGreater)) {
+                            this.ZonePatchIsInOrLaterThanPatch(PatchManager.GetTerritoryPatch(territoryId), RichPresenceConfig.PatchNumberOrGreater)) {
                         territoryName = Regex.Replace(territoryName, TERRITORY_NAME_CHARS_REGEX, UNSPOILED_TERRITORY_NAME_CHAR);
                         territoryRegion = Regex.Replace(territoryRegion, TERRITORY_NAME_CHARS_REGEX, UNSPOILED_TERRITORY_NAME_CHAR);
                     } else {

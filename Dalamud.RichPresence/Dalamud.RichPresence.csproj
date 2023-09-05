@@ -73,6 +73,7 @@
 
     <ItemGroup>
         <Content Remove="Resources/loc/*.json" />
+        <Content Remove="Resources/data/*.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -80,6 +81,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources/loc/*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources/data/*.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

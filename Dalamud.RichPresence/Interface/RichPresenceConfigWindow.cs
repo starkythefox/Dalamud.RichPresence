@@ -15,8 +15,11 @@ namespace Dalamud.RichPresence.Interface
         private RichPresenceConfig RichPresenceConfig;
         private string Filter = "";
 
+        internal static PatchManager PatchManager { get; private set; }
+
         public RichPresenceConfigWindow()
         {
+            PatchManager = new PatchManager();
             RichPresenceConfig = RichPresencePlugin.DalamudPluginInterface.GetPluginConfig() as RichPresenceConfig ?? new RichPresenceConfig();
         }
 
@@ -56,7 +59,7 @@ namespace Dalamud.RichPresence.Interface
                 {
                     ImGui.SetNextItemWidth(100f);
                     ImGui.InputTextWithHint("##patchFilter", "Filter...", ref Filter, 50);
-                    foreach (var patch in PatchManager.OrderedPatchNumbers)
+                    foreach (var patch in PatchManager.GetPatchNumbersInfo())
                     {
                         if ((Filter == string.Empty || patch.ToString().Contains(Filter, StringComparison.OrdinalIgnoreCase)))
                         {
