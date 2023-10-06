@@ -8,7 +8,7 @@ namespace Dalamud.RichPresence.Managers
     {
         private const string UNKNOWN_PATCH_NUMBER = "99999999.99";
         private List<string> patchNumbersInfo;
-        private Dictionary<ulong, string> territoryPatchInfo;
+        private Dictionary<uint, string> territoryPatchInfo;
   
         public PatchManager() {
             this.ReadPatchNumbersFile();
@@ -27,7 +27,7 @@ namespace Dalamud.RichPresence.Managers
 
         private void ReadTerritoryToPatchDictFile()
         {
-            territoryPatchInfo = JsonConvert.DeserializeObject<Dictionary<ulong, string>>(
+            territoryPatchInfo = JsonConvert.DeserializeObject<Dictionary<uint, string>>(
                     File.ReadAllText(Path.Combine(
                             RichPresencePlugin.DalamudPluginInterface.AssemblyLocation.DirectoryName,
                             "Resources",
@@ -40,7 +40,7 @@ namespace Dalamud.RichPresence.Managers
             return this.patchNumbersInfo;
         }
 
-        public string GetTerritoryPatch(ulong territory)
+        public string GetTerritoryPatch(uint territory)
         {
             string patchNumber;
             if (this.territoryPatchInfo.TryGetValue(territory, out patchNumber)) {
