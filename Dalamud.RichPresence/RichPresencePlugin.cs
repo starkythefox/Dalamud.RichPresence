@@ -197,11 +197,9 @@ namespace Dalamud.RichPresence
         private string GetTerritoryName(TerritoryType territory) {
             string territoryName = LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
 
-            if (territory.ContentFinderCondition.Value != null &&
-                    !territory.ContentFinderCondition.Value.Name.ToString().IsNullOrWhitespace()) {
+            if (!String.IsNullOrWhiteSpace(territory.ContentFinderCondition?.Value?.Name?.ToString())) {
                 territoryName = territory.ContentFinderCondition.Value?.Name;
-            } else if (territory.PlaceName.Value != null &&
-                    !territory.PlaceName.Value.Name.ToString().IsNullOrWhitespace()) {
+            } else if (!String.IsNullOrWhiteSpace(territory.PlaceName?.Value?.Name?.ToString())) {
                 territoryName = territory.PlaceName.Value?.Name;
             }
 
