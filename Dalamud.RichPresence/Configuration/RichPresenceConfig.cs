@@ -15,6 +15,12 @@ namespace Dalamud.RichPresence.Configuration
         // Show world name
         public bool ShowWorld = true;
 
+        // Show current zone
+        public bool ShowCurrentZone = true;
+        // Mask new zones names
+        public bool MaskNewZones = true;
+        // Minimum patch number for masking zone names
+        public string PatchNumberOrGreater = "6.5";
         // Show elapsed time in zones
         public bool ShowStartTime = false;
         // Reset timer when changing zones

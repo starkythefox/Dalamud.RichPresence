@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 using Dalamud.Game;
 using Dalamud.Game.Command;
@@ -46,6 +48,7 @@ namespace Dalamud.RichPresence
         internal static LocalizationManager LocalizationManager { get; private set; }
         internal static DiscordPresenceManager DiscordPresenceManager { get; private set; }
         internal static IpcManager IpcManager { get; private set; }
+        internal static PatchManager PatchManager { get; private set; }
 
         private static RichPresenceConfigWindow RichPresenceConfigWindow;
         internal static RichPresenceConfig RichPresenceConfig { get; set; }
@@ -54,6 +57,8 @@ namespace Dalamud.RichPresence
         private DateTime startTime = DateTime.UtcNow;
         private bool presenceInQueue;
 
+        private const string TERRITORY_NAME_CHARS_REGEX = @"[A-Za-z0-9\-:'.()\\\u00E6]";
+        private const string UNSPOILED_TERRITORY_NAME_CHAR = "?";
         private const string DEFAULT_LARGE_IMAGE_KEY = "li_1";
         private const string DEFAULT_SMALL_IMAGE_KEY = "class_0";
         private static readonly DiscordRPC.RichPresence DEFAULT_PRESENCE = new()
@@ -72,6 +77,7 @@ namespace Dalamud.RichPresence
             DiscordPresenceManager = new DiscordPresenceManager();
             LocalizationManager = new LocalizationManager();
             IpcManager = new IpcManager();
+            PatchManager = new PatchManager();
             SetDefaultPresence();
 
             RichPresenceConfigWindow = new RichPresenceConfigWindow();
@@ -171,6 +177,22 @@ namespace Dalamud.RichPresence
             );
         }
 
+        private bool ZonePatchIsInOrLaterThanPatch(string zonePatch, string patch)
+        {
+            if (zonePatch.Equals(PatchManager.UNKNOWN_PATCH_NUMBER) && patch.Equals("Newer"))
+            {
+                return true;
+            }
+
+            if (patch.Equals("Newer"))
+            {
+                return false;
+            }
+
+            return float.Parse(zonePatch, CultureInfo.InvariantCulture) >=
+                float.Parse(patch, CultureInfo.InvariantCulture);
+        }
+
         private unsafe void UpdateRichPresence(IFramework framework)
         {
             try
@@ -254,16 +276,22 @@ namespace Dalamud.RichPresence
                 var richPresenceSmallImageKey = DEFAULT_SMALL_IMAGE_KEY;
                 var richPresenceSmallImageText = LocalizationManager.Localize("DalamudRichPresenceOnline", LocalizationLanguage.Client);
 
-                if (territoryId != 0)
+                if (territoryId != 0 && RichPresenceConfig.ShowCurrentZone)
                 {
                     // Read territory data from generated sheet
                     var territory = this.Territories.First(row => row.RowId == territoryId);
                     territoryName = territory.PlaceName.Value?.Name ?? LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
                     territoryRegion = territory.PlaceNameRegion.Value?.Name ?? LocalizationManager.Localize("DalamudRichPresenceUnknown", LocalizationLanguage.Client);
 
-                    // Set large image to territory
-                    richPresenceLargeImageText = territoryName;
-                    richPresenceLargeImageKey = $"li_{territory.LoadingImage}";
+                    if (RichPresenceConfig.MaskNewZones &&
+                            this.ZonePatchIsInOrLaterThanPatch(PatchManager.GetTerritoryPatch(territoryId), RichPresenceConfig.PatchNumberOrGreater)) {
+                        territoryName = Regex.Replace(territoryName, TERRITORY_NAME_CHARS_REGEX, UNSPOILED_TERRITORY_NAME_CHAR);
+                        territoryRegion = Regex.Replace(territoryRegion, TERRITORY_NAME_CHARS_REGEX, UNSPOILED_TERRITORY_NAME_CHAR);
+                    } else {
+                        // Set large image to territory
+                        richPresenceLargeImageText = territoryName;
+                        richPresenceLargeImageKey = $"li_{territory.LoadingImage}";
+                    }
                 }
 
                 // Show character name if configured
