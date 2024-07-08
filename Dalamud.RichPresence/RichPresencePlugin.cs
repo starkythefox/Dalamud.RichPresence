@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
+using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
@@ -22,7 +23,7 @@ namespace Dalamud.RichPresence
     internal class RichPresencePlugin : IDalamudPlugin, IDisposable
     {
         [PluginService]
-        internal static DalamudPluginInterface DalamudPluginInterface { get; private set; }
+        internal static IDalamudPluginInterface DalamudPluginInterface { get; private set; }
 
         [PluginService]
         internal static IClientState ClientState { get; private set; }

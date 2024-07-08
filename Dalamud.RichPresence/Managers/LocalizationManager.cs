@@ -6,6 +6,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 using Dalamud.RichPresence.Models;
+using Dalamud.Game;
 
 namespace Dalamud.RichPresence.Managers
 {
