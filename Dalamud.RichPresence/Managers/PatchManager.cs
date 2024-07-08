@@ -6,10 +6,10 @@ namespace Dalamud.RichPresence.Managers
 {
     internal class PatchManager
     {
-        private const string UNKNOWN_PATCH_NUMBER = "99999999.99";
+        public const string UNKNOWN_PATCH_NUMBER = "99999999.99";
         private List<string> patchNumbersInfo;
         private Dictionary<uint, string> territoryPatchInfo;
-  
+
         public PatchManager() {
             this.ReadPatchNumbersFile();
             this.ReadTerritoryToPatchDictFile();

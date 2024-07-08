@@ -176,9 +176,20 @@ namespace Dalamud.RichPresence
             );
         }
 
-        private bool ZonePatchIsInOrLaterThanPatch(string zonePatch, string patch) {
-             return float.Parse(zonePatch, CultureInfo.InvariantCulture) >=
-                 float.Parse(patch, CultureInfo.InvariantCulture);
+        private bool ZonePatchIsInOrLaterThanPatch(string zonePatch, string patch)
+        {
+            if (zonePatch.Equals(PatchManager.UNKNOWN_PATCH_NUMBER) && patch.Equals("Newer"))
+            {
+                return true;
+            }
+
+            if (patch.Equals("Newer"))
+            {
+                return false;
+            }
+
+            return float.Parse(zonePatch, CultureInfo.InvariantCulture) >=
+                float.Parse(patch, CultureInfo.InvariantCulture);
         }
 
         private unsafe void UpdateRichPresence(IFramework framework)
